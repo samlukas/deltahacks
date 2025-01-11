@@ -1,10 +1,11 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
+import os
 
 class DB:
     def __init__(self):
-        cred = credentials.Certificate("juniwhatjuni-firebase-adminsdk-8nzz1-823dfd527e.json")
+        cred = credentials.Certificate(os.environ.get("FIREBASE_API_PATH"))
         firebase_admin.initialize_app(cred)
         
         try:
