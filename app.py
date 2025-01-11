@@ -79,5 +79,24 @@ def logout():
     flash('Successfully logged out')
     return redirect(url_for('login'))
 
+@app.route('/restaurant', methods=['POST'])
+def restaurant():
+    restaurant = request.args.get('name')
+    # session['restaurant'] = restaurant
+
+    if 'email' not in session:
+        flash('Please login first')
+        return redirect(url_for('login'))
+
+    user = db.get_user_by_email(session['email'])
+    if not user:
+        session.clear()
+        flash('User not found')
+        return redirect(url_for('login'))
+
+    db.add_restaurant(session['email'], restaurant['name'])
+    flash('Successfully added restaurant')
+    return render_template('restaurant.html', user=user, restaurant=restaurant)
+
 if __name__ == '__main__':
     app.run(debug=True)
