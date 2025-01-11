@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Google Maps Restaurant Enhancer",
+    "version": "1.0",
+    "description": "Displays restaurant names from Google Maps in a popup.",
+    "permissions": ["activeTab", "scripting"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://www.google.com/maps/*"],
+        "js": ["content.js"]
+      }
+    ]
+}
