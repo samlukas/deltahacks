@@ -1,0 +1,220 @@
+<div class="container">
+    <div class="profile-card">
+        <div class="header-actions">
+            <a href="/" class="btn btn-logout">Logout</a>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="profile-section">
+            <h2>Personal Information</h2>
+            <div class="info-group">
+                <label>Name:</label>
+                <span>{{ user.name }}</span>
+            </div>
+            <div class="info-group">
+                <label>Email:</label>
+                <span>{{ user.email }}</span>
+            </div>
+        </div>
+
+        <!-- Questionnaire Responses Section -->
+        <div class="profile-section">
+            <h2>About Me</h2>
+            
+            <div class="response-group">
+                <h3>Relationship Goals</h3>
+                <p>{{ user.relationship_goals }}</p>
+            </div>
+
+            <div class="response-group">
+                <h3>How I Express Affection</h3>
+                <p>{{ user.affection_expression }}</p>
+            </div>
+
+            <div class="response-group">
+                <h3>My Free Time Approach</h3>
+                <p>{{ user.free_time }}</p>
+            </div>
+
+            <div class="response-group">
+                <h3>What Motivates Me</h3>
+                <p>{{ user.motivation }}</p>
+            </div>
+
+            <div class="response-group">
+                <h3>My Communication Style</h3>
+                <p>{{ user.communication_style }}</p>
+            </div>
+        </div>
+
+        <!-- Saved Restaurants Section -->
+        <div class="profile-section">
+            <h2>My Saved Restaurants</h2>
+            {% if user.saved_restaurants %}
+                <div class="restaurants-list">
+                    {% for restaurant in user.saved_restaurants %}
+                        <div class="restaurant-card">
+                            <div class="restaurant-info">
+                                <h3>{{ restaurant.name }}</h3>
+                            </div>
+                            <div class="save-date">
+                                Saved on {{ restaurant.date.toDate().strftime('%B %d, %Y') }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-restaurants">No restaurants saved yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    * {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        position: relative;
+        transform: none;
+        top: auto;
+        left: auto;
+        margin: 2rem auto;
+        max-width: 800px;
+    }
+
+    .profile-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+
+    .profile-section h2 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #5d2adf;
+    }
+
+    .info-group {
+        display: flex;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .info-group label {
+        font-weight: bold;
+        width: 120px;
+        color: #333;
+    }
+
+    .response-group {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    .response-group h3 {
+        color: #5d2adf;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .response-group p {
+        color: #333;
+        line-height: 1.5;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+    }
+
+    .btn-logout {
+        padding: 0.5rem 1rem;
+        background-color: #5d2adf;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .btn-logout:hover {
+        background-color: #400f9c;
+    }
+
+    .restaurants-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .restaurant-card {
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+
+    .restaurant-card:hover {
+        transform: translateX(5px);
+        background-color: #f0f0f0;
+    }
+
+    .restaurant-info h3 {
+        color: #5d2adf;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .restaurant-details {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .restaurant-details span {
+        margin-right: 1rem;
+    }
+
+    .save-date {
+        color: #888;
+        font-size: 0.9rem;
+        text-align: right;
+    }
+
+    .no-restaurants {
+        color: #666;
+        text-align: center;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+        .restaurant-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .save-date {
+            text-align: left;
+        }
+    }
+</style>

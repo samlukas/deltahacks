@@ -1,0 +1,179 @@
+<div class="container">
+    <form method="POST" class="signup-form">
+        <!-- Personal Information -->
+        <div class="form-section">
+            <h3>Personal Information</h3>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+        </div>
+
+        <!-- Questionnaire -->
+        <div class="form-section">
+            <h3>About You</h3>
+            
+            <div class="question-group">
+                <label>1. What are your relationship goals?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="relationship_goals" value="Looking for something short-term" required> Short-term</label>
+                    <label><input type="radio" name="relationship_goals" value="Looking for a long-term relationship"> Long-term</label>
+                    <label><input type="radio" name="relationship_goals" value="Just here to have fun"> For fun</label>
+                    <label><input type="radio" name="relationship_goals" value="Still figuring things out"> Unsure</label>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <label>2. How do you usually express affection?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="affection_expression" value="I express my love through physical touch" required> Through physical touch</label>
+                    <label><input type="radio" name="affection_expression" value="I show I care by giving thoughtful gifts"> By giving thoughtful gifts</label>
+                    <label><input type="radio" name="affection_expression" value="I value spending quality time together"> Spending quality time together</label>
+                    <label><input type="radio" name="affection_expression" value="I express my feelings through words of encouragement"> Offering words of encouragement and support</label>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <label>3. How do you approach your free time?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="free_time" value="I like to plan my activities in advance" required> I prefer to plan it out in advance</label>
+                    <label><input type="radio" name="free_time" value="I prefer to be spontaneous and flexible"> I go with the flow and see what happens</label>
+                    <label><input type="radio" name="free_time" value="I enjoy staying active with various activities"> I like to keep busy with different activities</label>
+                    <label><input type="radio" name="free_time" value="I value my alone time to recharge"> I enjoy quiet time to relax and recharge</label>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <label>4. What motivates you the most?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="motivation" value="Setting and achieving personal goals" required> Achieving personal goals</label>
+                    <label><input type="radio" name="motivation" value="Making a positive impact on others"> Helping others or making a difference</label>
+                    <label><input type="radio" name="motivation" value="Discovering new experiences and adventures"> Exploring new things and experiences</label>
+                    <label><input type="radio" name="motivation" value="Being acknowledged for my accomplishments"> Recognition or rewards for hard work</label>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <label>5. What's your communication style?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="communication_style" value="I communicate in a clear and straightforward way" required> Direct and to the point</label>
+                    <label><input type="radio" name="communication_style" value="I focus on understanding others' feelings"> Empathetic and understanding</label>
+                    <label><input type="radio" name="communication_style" value="I keep conversations fun and casual"> Lighthearted and playful</label>
+                    <label><input type="radio" name="communication_style" value="I take time to consider before responding"> Thoughtful and reflective</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-signup">Sign Up</button>
+    </form>
+</div>
+
+<style>
+    * {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        position: relative;
+        transform: none;
+        top: auto;
+        left: auto;
+        margin: 2rem auto;
+        max-width: 600px;
+    }
+
+    .signup-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid #222222;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #1e1e1e;
+    }
+
+    .question-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .question-group label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-left: 1rem;
+    }
+
+    .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: normal;
+        cursor: pointer;
+    }
+
+    .radio-group input[type="radio"] {
+        cursor: pointer;
+    }
+
+    .btn-signup {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: #5d2adf;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .btn-signup:hover {
+        background-color: #400f9c;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 1rem;
+        }
+
+        .signup-form {
+            padding: 1rem;
+        }
+    }
+</style>
