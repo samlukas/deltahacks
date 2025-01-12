@@ -59,6 +59,8 @@ def signup():
         if db.add_user(user_data):
             session['email'] = user_data['email']
             flash('Account created successfully!')
+            restaurants = db.get_restaurant_by_user(user_data['email'])
+            user_data['saved_restaurants'] = restaurants
             return render_template('profile.html', user=user_data)
         else:
             return 'Error creating account', 400

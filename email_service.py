@@ -35,7 +35,7 @@ def get_message(user, matched_user, restaurant):
     return res.text
 
 def get_prompt(user, matched_user, restaurant):
-    matched_user_profile = f"Wants {matched_user["relationship_goals"]} relationship, Expresses emotion {matched_user["affection_expression"]}, {matched_user["free_time"]} on free times, {matched_user["motivation"]} motivates me, Has {matched_user["communication_style"]} communication style"
+    matched_user_profile = f"Wants {matched_user['relationship_goals']} relationship, Expresses emotion {matched_user['affection_expression']}, {matched_user['free_time']} on free times, {matched_user['motivation']} motivates me, Has {matched_user['communication_style']} communication style"
     msg = f"""
     Write a polite and engaging email to notify a user that they have been matched with another user on a restaurant date through a dating app. Use the following details to generate the email:
 
