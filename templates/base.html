@@ -95,11 +95,20 @@
             70% { opacity: 1; }
             100% { opacity: 0; }
         }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Adjust duration as needed */
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease; /* Adjust duration as needed */
+        }
     </style>
 </head>
 <body>
-    <div id="flash-container"></div>
-    <!-- <div id="flash-container">
+    <div id="flash-container">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
@@ -107,7 +116,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-    </div> -->
+    </div>
     <div id="title-container"></div>
     <div id="content">
         <div class="container">
@@ -124,45 +133,60 @@
             $(document).on('click', '[data-link]', function(e) {
                 e.preventDefault();
                 const url = $(this).attr('href');
-                loadPage(url);
+
+                // Add fade-out class to the content
+                $('#content').addClass('fade-out');
+
+                // Wait for the transition to finish before loading the new page
+                setTimeout(function() {
+                    loadPage(url);
+                }, 500); // Match this duration with the CSS transition duration
             });
+
+            // Function to load a new page
+            function loadPage(url) {
+                $.get(url, function(response) {
+                    $('#content').html(response);
+                    updateTitle(url);
+                    history.pushState({}, '', url);
+                    $('#content').removeClass('fade-out').addClass('fade-in'); // Fade in the new content
+                });
+            }
 
             // Handle form submissions
             $(document).on('submit', 'form', function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const url = form.attr('action') || window.location.pathname;
-                
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: form.serialize(),
-                    success: function(response) {
-                        $('#content').html(response);
-                        updateTitle(url);
-                        history.pushState({}, '', url);
 
-                    },
-                    error: function(xhr) {
-                        const flashDiv = $('<div>')
-                            .addClass('flash-message')
-                            .text(xhr.responseText);
-                        $('#flash-container').append(flashDiv);
-                        
-                        setTimeout(() => {
-                            flashDiv.remove();
-                        }, 5000);
-                    }
-                });
+                // Add fade-out class to the content
+                $('#content').addClass('fade-out');
+
+                // Wait for the transition to finish before submitting the form
+                setTimeout(function() {
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: form.serialize(),
+                        success: function(response) {
+                            $('#content').html(response);
+                            updateTitle(url);
+                            history.pushState({}, '', url);
+                            $('#content').removeClass('fade-out').addClass('fade-in'); // Fade in the new content
+                        },
+                        error: function(xhr) {
+                            const flashDiv = $('<div>')
+                                .addClass('flash-message')
+                                .text(xhr.responseText);
+                            $('#flash-container').append(flashDiv);
+                            
+                            setTimeout(() => {
+                                flashDiv.remove();
+                            }, 5000);
+                        }
+                    });
+                }, 500); // Match this duration with the CSS transition duration
             });
-
-            function loadPage(url) {
-                $.get(url, function(response) {
-                    $('#content').html(response);
-                    updateTitle(url);
-                    history.pushState({}, '', url);
-                });
-            }
 
             function updateTitle(url) {
                 if (url === '/' || url === '') {
