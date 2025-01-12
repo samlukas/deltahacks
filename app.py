@@ -6,8 +6,13 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
 db = DB()
 
+def is_ajax_request():
+    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
 @app.route('/')
 def index():
+    if is_ajax_request():
+        return render_template('home_content.html')
     return render_template('base.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -19,10 +24,9 @@ def login():
         user = db.get_user_by_email(email)
         if user and password == user.get('password'):
             session['email'] = email
-            flash('Successfully logged in!')
-            return redirect(url_for('profile'))
+            return render_template('profile.html', user=user)
         else:
-            flash('Invalid email or password')
+            return 'Invalid email or password', 400
     
     return render_template('login.html')
 
@@ -49,10 +53,9 @@ def signup():
         
         if db.add_user(user_data):
             session['email'] = user_data['email']
-            flash('Successfully signed up!')
-            return redirect(url_for('profile'))
+            return render_template('profile.html', user=user_data)
         else:
-            flash('Error creating account')
+            return 'Error creating account', 400
     
     return render_template('signup.html')
 

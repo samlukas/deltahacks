@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -22,7 +23,7 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
+            /* text-align: center; */
         }
 
         .title {
@@ -34,6 +35,7 @@
             left: 50%;
             top: 30%;
             transform: translateX(-50%);
+            text-align: center;
         }
 
         .btn {
@@ -44,6 +46,7 @@
             cursor: pointer;
             line-height: 1.5;
             align-items: center;
+            text-align: center;
         }
 
         .btn-login {
@@ -70,15 +73,93 @@
         .content {
             padding: 2rem 1rem;
         }
+
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .flash-message {
+            background-color: #5d2adf;
+            color: white;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            animation: fadeOut 5s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <a class="title" href="/">Binge</a>
-    <div class="container">
-        <div class="nav-buttons">
-            <a href="/login" class="btn btn-login">Login</a>
-            <a href="/signup" class="btn btn-signup">Sign Up</a>
+    <div id="flash-container"></div>
+    <div id="title-container"></div>
+    <div id="content">
+        <div class="container">
+            <div class="nav-buttons">
+                <a href="/login" class="btn btn-login" data-link>Login</a>
+                <a href="/signup" class="btn btn-signup" data-link>Sign Up</a>
+            </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle all link clicks
+            $(document).on('click', '[data-link]', function(e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+                loadPage(url);
+            });
+
+            // Handle form submissions
+            $(document).on('submit', 'form', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const url = form.attr('action') || window.location.pathname;
+                
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        $('#content').html(response);
+                        updateTitle(url);
+                        history.pushState({}, '', url);
+                    }
+                });
+            });
+
+            function loadPage(url) {
+                $.get(url, function(response) {
+                    $('#content').html(response);
+                    updateTitle(url);
+                    history.pushState({}, '', url);
+                });
+            }
+
+            function updateTitle(url) {
+                if (url === '/' || url === '') {
+                    $('#title-container').html('<a class="title" href="/" data-link>Binge</a>');
+                } else {
+                    $('#title-container').empty();
+                }
+            }
+
+            // Handle browser back/forward buttons
+            window.onpopstate = function() {
+                loadPage(window.location.pathname);
+            };
+
+            // Initial title state
+            updateTitle(window.location.pathname);
+        });
+    </script>
 </body>
 </html>
