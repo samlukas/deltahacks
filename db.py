@@ -88,7 +88,10 @@ class DB:
         if len(user_embeddings) < 2:
             return None
         else:
-            return self.find_max_similarity(user_embeddings)
+            i, j = self.find_max_similarity(user_embeddings)
+            if i < 0 or j < 0 or i >= len(filtered_users) or j >= len(filtered_users):
+                return None
+            return (filtered_users[i], filtered_users[j])
  
     def answers_to_embeddings(self, answers):
         matrix = []
