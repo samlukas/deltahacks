@@ -55,10 +55,10 @@
                     {% for restaurant in user.saved_restaurants %}
                         <div class="restaurant-card">
                             <div class="restaurant-info">
-                                <h3>{{ restaurant.name }}</h3>
+                                <h3>{{ restaurant.restaurant }}</h3>
                             </div>
                             <div class="save-date">
-                                Saved on {{ restaurant.date.toDate().strftime('%B %d, %Y') }}
+                                Saved on {{ restaurant.date.strftime('%B %d, %Y') }}
                             </div>
                         </div>
                     {% endfor %}
