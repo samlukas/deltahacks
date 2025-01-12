@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from db import DB
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KEY")
 db = DB()
 
 def is_ajax_request():
@@ -24,6 +27,7 @@ def login():
         user = db.get_user_by_email(email)
         if user and password == user.get('password'):
             session['email'] = email
+            flash('Successfully logged in!')
             return render_template('profile.html', user=user)
         else:
             return 'Invalid email or password', 400
@@ -53,6 +57,7 @@ def signup():
         
         if db.add_user(user_data):
             session['email'] = user_data['email']
+            flash('Account created successfully!')
             return render_template('profile.html', user=user_data)
         else:
             return 'Error creating account', 400
@@ -79,7 +84,7 @@ def profile():
 @app.route('/logout')
 def logout():
     session.clear()
-    flash('Successfully logged out')
+    # flash('Successfully logged out!')
     return redirect(url_for('index'))
 
 @app.route('/restaurant', methods=['GET'])

@@ -3,12 +3,15 @@ from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 import os
 from cohere_scripts import MAPPINGS, create_embeddings, calculate_similarity
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class DB:
     def __init__(self):
-        cred = credentials.Certificate(os.environ.get("FIREBASE_API_PATH"))
+        cred = credentials.Certificate(os.getenv("FIREBASE_API_PATH"))
         firebase_admin.initialize_app(cred)
-        embeddings = create_embeddings()
+        self.embeddings = create_embeddings()
         
         try:
             self.db = firestore.client()
@@ -39,6 +42,7 @@ class DB:
         return None
 
     def add_restaurant(self, userid, restaurant):
+        # print(self.embeddings)
         try:
             data = {
                 'userid': userid,
@@ -64,11 +68,18 @@ class DB:
     
     def check_matches(self, restaurant):
         user_data = self.get_user_by_restaurant(restaurant)
+        print(f"userdata: {user_data}")
         now = datetime.now()
         time_24_hours_ago = now - timedelta(hours=24)
 
-        filtered_data = [entry for entry in user_data if entry['date'] >= time_24_hours_ago]
-        users = [self.get_user_by_email(entry['email']) for entry in filtered_data]
+        filtered_data = [
+            entry for entry in user_data 
+            if datetime.fromtimestamp(entry['date'].timestamp()) >= time_24_hours_ago
+        ]
+
+        print(f"filtered_data: {filtered_data}")
+        users = [self.get_user_by_email(entry['userid']) for entry in filtered_data]
+        print(f"users: {users}")
         filtered_users = [user for user in users if user is not None]
 
         user_answers = [[user['relationship_goals'], user['affection_expression'], user['free_time'], user['motivation'], user['communication_style']] for user in filtered_users]
