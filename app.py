@@ -77,7 +77,7 @@ def profile():
 def logout():
     session.clear()
     flash('Successfully logged out')
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 @app.route('/restaurant', methods=['GET'])
 def restaurant():
