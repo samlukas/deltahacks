@@ -19,10 +19,12 @@ class DB:
         except base64.binascii.Error as e:
             raise ValueError("Failed to decode FIREBASE_API_B64. Ensure it is a valid Base64 string.") from e
 
-        with open("firebase-credentials.json", "wb") as f:
+        temp_file_path = "/tmp/firebase-credentials.json"
+
+        with open(temp_file_path, "wb") as f:
             f.write(decoded_cred)
 
-        cred = credentials.Certificate("firebase-credentials.json")
+        cred = credentials.Certificate(temp_file_path)
         firebase_admin.initialize_app(cred)
         self.embeddings = create_embeddings()
         
