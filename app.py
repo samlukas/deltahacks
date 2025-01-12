@@ -14,6 +14,7 @@ def is_ajax_request():
 
 @app.route('/')
 def index():
+    session.clear()
     if is_ajax_request():
         return render_template('home_content.html')
     return render_template('base.html')
