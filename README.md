@@ -4,10 +4,12 @@
 
 ## Overview
 
+Hinge is gross, dating apps suck, and we want to eat. Introducing a new kind of online dating platform that moves beyond superficial judgments. Instead of focusing on appearances, it offers an opportunity to connect through shared interests and food preferences, allowing you to meet your authentic self—and maybe someone special—over a meal.
+
 Binge is a web application with a Chrome extension agent that allows users to create profiles, save their favourite restaurants, and find potential matches based on shared interests and preferences. Once a match is found, the matched person's email address, name, and the restaurant of mutual interest are sent via email. The application offers a seamless user experience across both the Binge web platform and the Chrome extension while on Google Maps for restaurant searches.
 
 [![Watch the video](https://img.youtube.com/vi/CQ_F9sFK4w4/maxresdefault.jpg)](https://www.youtube.com/watch?v=CQ_F9sFK4w4)
-[alt text](email.png)
+![alt text](email.png)
 
 ## Features
 
