@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 import os
+import base64
 from cohere_scripts import MAPPINGS, create_embeddings, calculate_similarity
 from dotenv import load_dotenv
 
@@ -9,7 +10,19 @@ load_dotenv()
 
 class DB:
     def __init__(self):
-        cred = credentials.Certificate(os.getenv("FIREBASE_API_PATH"))
+        encoded_cred = os.getenv("FIREBASE_API_B64")
+        if not encoded_cred:
+            raise ValueError("FIREBASE_API_B64 environment variable is not set")
+
+        try:
+            decoded_cred = base64.b64decode(encoded_cred)
+        except base64.binascii.Error as e:
+            raise ValueError("Failed to decode FIREBASE_API_B64. Ensure it is a valid Base64 string.") from e
+
+        with open("firebase-credentials.json", "wb") as f:
+            f.write(decoded_cred)
+
+        cred = credentials.Certificate("firebase-credentials.json")
         firebase_admin.initialize_app(cred)
         self.embeddings = create_embeddings()
         
