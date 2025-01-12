@@ -106,7 +106,6 @@ def calculate_similarity(a, b):
 
 - Python 3.x
 - Flask
-- Flask-CORS
 - dotenv
 - jQuery
 
