@@ -20,11 +20,11 @@ def send_email(user, matched_user, restaurant):
     msg['From'] = binge_email
     msg['To'] = user["email"]
 
-    s = smtplib.SMTP('smpt.gmail.com', 587)
-    s.starttls()
-    s.login(binge_email, os.getenv("EMAIL_PW"))
-    s.send_message(msg)
-    s.quit()
+    with smtplib.SMTP('smtp.gmail.com', 587) as s:
+        s.starttls()
+        s.login(binge_email, os.getenv("EMAIL_PW"))
+        s.send_message(msg)
+        s.quit()
 
 def get_message(user, matched_user, restaurant):
     prompt = get_prompt(user, matched_user, restaurant)
