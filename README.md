@@ -4,7 +4,10 @@
 
 ## Overview
 
-Binge is a web application with a Chrome extension agent that allows users to create profiles, save their favorite restaurants, and find potential matches based on shared interests and preferences. The application provides a seamless user experience across both the web and the Chrome extension.
+Binge is a web application with a Chrome extension agent that allows users to create profiles, save their favourite restaurants, and find potential matches based on shared interests and preferences. Once a match is found, the matched person's email address, name, and the restaurant of mutual interest are sent via email. The application offers a seamless user experience across both the Binge web platform and the Chrome extension while on Google Maps for restaurant searches.
+
+[![Watch the video](https://img.youtube.com/vi/CQ_F9sFK4w4/maxresdefault.jpg)](https://www.youtube.com/watch?v=CQ_F9sFK4w4)
+[alt text](email.png)
 
 ## Features
 
@@ -13,7 +16,6 @@ Binge is a web application with a Chrome extension agent that allows users to cr
 - **Matching System**: Find potential matches based on user preferences and interests.
 - **Email Notifications**: Users receive email notifications when matched with another user.
 - **Chrome Extension**: A browser extension that allows users to easily save restaurants while browsing.
-- **Responsive Design**: Optimized for both mobile and desktop devices.
 
 ## Accessing the Program
 
@@ -46,9 +48,9 @@ Binge Web Page can be accessed at [http://www.bingeeating.study](http://www.bing
 ## Technologies Used
 
 - **Backend**: Flask
-- **Frontend**: HTML, CSS, JavaScript (jQuery)
-- **Database**: Custom database implementation (db.py)
-- **Natural Language Processing**: Cohere for generating personalized messages
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: Firebase
+- **Natural Language Processing**: Cohere Chat API for generating personalized messages
 - **Email Service**: SMTP for sending emails
 - **Chrome Extension**: JavaScript for the extension functionality
 - **Environment Variables**: dotenv for managing sensitive information
@@ -77,30 +79,6 @@ Cohere is used in the Binge application to create embeddings for user responses 
    - The function returns a scalar value representing the similarity score, which ranges from -1 (completely dissimilar) to 1 (identical).
    - A higher similarity score indicates that the users have more in common based on their responses.
 
-### Example Code Snippet for Cohere Integration
-
-Here’s a simplified version of the relevant code from `cohere_scripts.py`:
-
-```python
-def create_embeddings():
-    # Generate embeddings for user responses
-    # (Implementation details omitted for brevity)
-    return embedding_matrix
-
-def calculate_similarity(a, b):
-    # Calculate cosine similarity between two vectors
-    a_array = np.array(a)
-    b_array = np.array(b)
-    
-    # Ensure vectors are 1-dimensional
-    a_flat = a_array.flatten()
-    b_flat = b_array.flatten()
-    
-    # Calculate cosine similarity
-    similarity = np.dot(a_flat, b_flat) / (np.linalg.norm(a_flat) * np.linalg.norm(b_flat))
-    
-    return float(similarity)
-```
 
 ## Prerequisites
 
