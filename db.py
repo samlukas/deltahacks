@@ -74,8 +74,8 @@ class DB:
                 print(restaurant)
                 send_email(match[0], match[1], restaurant)
                 send_email(match[1], match[0], restaurant)
-                self.delete_restaurant_from_user(match[0]['email'], restaurant)
-                self.delete_restaurant_from_user(match[1]['email'], restaurant)
+                self.delete_restaurant_from_user(restaurant, match[0]['email'])
+                self.delete_restaurant_from_user(restaurant, match[1]['email'])
             else:
                 print("no match found")
             return True
