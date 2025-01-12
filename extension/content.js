@@ -67,7 +67,13 @@ function displayRestaurantPopup() {
           font-size: 14px;
         `;
         matchButton.addEventListener("click", () => {
-          console.log("Match button clicked for", restaurantName);
+            console.log("Match button clicked for", restaurantName);
+            const targetUrl = "http://127.0.0.1:5000/restaurant"; // Flask backend URL
+            const encodedRestaurantName = encodeURIComponent(restaurantName);
+            const finalUrl = `${targetUrl}?name=${encodedRestaurantName}`;
+          
+            console.log("Opening new tab with URL:", finalUrl);
+            window.open(finalUrl, "_blank"); // Open the URL in a new tab
         });
   
         // Append the heading, restaurant name, and button to the popup
@@ -79,8 +85,7 @@ function displayRestaurantPopup() {
   
         setTimeout(() => {
           popup.remove();
-          console.log("Popup removed from the DOM");
-        }, 5000); // 5 seconds
+        }, 1000); // 1 seconds
       }
     } else {
       console.log("No restaurant name found.");
