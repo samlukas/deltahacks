@@ -71,8 +71,8 @@ class DB:
                 print("match found")
                 print(match[0])
                 print(match[1])
-                print(restaurant['restaurant'])
-                send_email(match[0], match[1], restaurant['restaurant'])
+                print(restaurant)
+                send_email(match[0], match[1], restaurant)
             else:
                 print("no match found")
             return True
