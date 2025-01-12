@@ -73,6 +73,7 @@ class DB:
                 print(match[1])
                 print(restaurant)
                 send_email(match[0], match[1], restaurant)
+                send_email(match[1], match[0], restaurant)
             else:
                 print("no match found")
             return True
