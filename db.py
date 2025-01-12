@@ -74,6 +74,8 @@ class DB:
                 print(restaurant)
                 send_email(match[0], match[1], restaurant)
                 send_email(match[1], match[0], restaurant)
+                self.delete_restaurant_from_user(match[0]['email'], restaurant)
+                self.delete_restaurant_from_user(match[1]['email'], restaurant)
             else:
                 print("no match found")
             return True
@@ -88,6 +90,11 @@ class DB:
     def get_user_by_restaurant(self, restaurant):
         users = self.db.collection('restaurant').where('restaurant', '==', restaurant).get()
         return [doc.to_dict() for doc in users]
+    
+    def delete_restaurant_from_user(self, restaurant, email):
+        query = self.db.collection('restaurant').where('restaurant', '==', restaurant).where('email', '==', email).get()
+        for doc in query:
+            doc.reference.delete()
     
     def check_matches(self, restaurant):
         user_data = self.get_user_by_restaurant(restaurant)
