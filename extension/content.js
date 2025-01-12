@@ -68,7 +68,7 @@ function displayRestaurantPopup() {
         `;
         matchButton.addEventListener("click", () => {
             console.log("Match button clicked for", restaurantName);
-            const targetUrl = "http://127.0.0.1:5000/restaurant"; // Flask backend URL
+            const targetUrl = "http://www.bingeeating.study/restaurant"; // Flask backend URL
             const encodedRestaurantName = encodeURIComponent(restaurantName);
             const finalUrl = `${targetUrl}?name=${encodedRestaurantName}`;
           
