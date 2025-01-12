@@ -99,6 +99,15 @@
 </head>
 <body>
     <div id="flash-container"></div>
+    <!-- <div id="flash-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div> -->
     <div id="title-container"></div>
     <div id="content">
         <div class="container">
@@ -132,6 +141,17 @@
                         $('#content').html(response);
                         updateTitle(url);
                         history.pushState({}, '', url);
+
+                    },
+                    error: function(xhr) {
+                        const flashDiv = $('<div>')
+                            .addClass('flash-message')
+                            .text(xhr.responseText);
+                        $('#flash-container').append(flashDiv);
+                        
+                        setTimeout(() => {
+                            flashDiv.remove();
+                        }, 5000);
                     }
                 });
             });

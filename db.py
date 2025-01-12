@@ -1,12 +1,17 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
+from cohere_scripts import MAPPINGS, create_embeddings, calculate_similarity
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class DB:
     def __init__(self):
-        cred = credentials.Certificate(os.environ.get("FIREBASE_API_PATH"))
+        cred = credentials.Certificate(os.getenv("FIREBASE_API_PATH"))
         firebase_admin.initialize_app(cred)
+        self.embeddings = create_embeddings()
         
         try:
             self.db = firestore.client()
@@ -37,6 +42,7 @@ class DB:
         return None
 
     def add_restaurant(self, userid, restaurant):
+        # print(self.embeddings)
         try:
             data = {
                 'userid': userid,
@@ -44,15 +50,67 @@ class DB:
                 'date': datetime.now()
             }
             self.db.collection('restaurant').add(data)
+            match = self.check_matches(restaurant)
+            if match is not None:
+                pass # email function here
             return True
         except Exception as e:
             print(f'Error adding restaurant: {str(e)}')
             return False
     
-    def get_restaurant_by_user(self, userid):
-        restaurants = self.db.collection('restaurant').where('userid', '==', userid).get()
+    def get_restaurant_by_user(self, email):
+        restaurants = self.db.collection('restaurant').where('email', '==', email).get()
         return [doc.to_dict() for doc in restaurants]
     
     def get_user_by_restaurant(self, restaurant):
         users = self.db.collection('restaurant').where('restaurant', '==', restaurant).get()
         return [doc.to_dict() for doc in users]
+    
+    def check_matches(self, restaurant):
+        user_data = self.get_user_by_restaurant(restaurant)
+        print(f"userdata: {user_data}")
+        now = datetime.now()
+        time_24_hours_ago = now - timedelta(hours=24)
+
+        filtered_data = [
+            entry for entry in user_data 
+            if datetime.fromtimestamp(entry['date'].timestamp()) >= time_24_hours_ago
+        ]
+
+        print(f"filtered_data: {filtered_data}")
+        users = [self.get_user_by_email(entry['userid']) for entry in filtered_data]
+        print(f"users: {users}")
+        filtered_users = [user for user in users if user is not None]
+
+        user_answers = [[user['relationship_goals'], user['affection_expression'], user['free_time'], user['motivation'], user['communication_style']] for user in filtered_users]
+        user_embeddings = self.answers_to_embeddings(user_answers)
+
+        if len(user_embeddings) < 2:
+            return None
+        else:
+            return self.find_max_similarity(user_embeddings)
+ 
+    def answers_to_embeddings(self, answers):
+        matrix = []
+        for user in answers:
+            user_embeddings = [
+                self.embeddings[i, MAPPINGS[i][answer]] for i, answer in enumerate(user)
+            ]
+            matrix.append(user_embeddings)
+        return matrix
+    
+
+    def find_max_similarity(self, user_embeddings):
+        max_similarity = float('-inf')  # Initialize with a very low value
+        max_pair = None
+
+        # Iterate over all pairs of embeddings
+        for i in range(len(user_embeddings)):
+            for j in range(i + 1, len(user_embeddings)):  # Only consider pairs (i, j) where i < j
+                sim = calculate_similarity(user_embeddings[i], user_embeddings[j])
+                if sim > max_similarity:
+                    max_similarity = sim
+                    max_pair = (i, j)
+
+        return max_pair
+
