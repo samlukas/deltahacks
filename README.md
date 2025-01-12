@@ -15,6 +15,34 @@ Binge is a web application with a Chrome extension agent that allows users to cr
 - **Chrome Extension**: A browser extension that allows users to easily save restaurants while browsing.
 - **Responsive Design**: Optimized for both mobile and desktop devices.
 
+## Accessing the Program
+
+Binge Web Page can be accessed at [http://www.bingeeating.study](http://www.bingeeating.study) or [https://deltahacks-git-main-sams-projects-71d5eb04.vercel.app/](https://deltahacks-git-main-sams-projects-71d5eb04.vercel.app/).
+
+### Chrome Extension Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/binge.git
+   cd binge
+   ```
+2. Navigate to the `extension` directory in your cloned repository.
+3. Open Chrome and go to `chrome://extensions/`.
+4. Enable "Developer mode" in the top right corner.
+5. Click on "Load unpacked" and select the `extension` directory.
+6. The Binge extension should now be installed and ready to use.
+
+## Usage
+
+- **Login**: Click on the "Login" button to login to existing account.
+- **Signup**: Create a new account by filling out the signup form and the questionaire.
+- **Profile**: After logging in, you can view and edit your profile, including your saved restaurants.
+- **Restaurant Matching**: Use the restaurant matching feature to find potential matches based on your preferences.
+- **Email Notifications**: Users receive email notifications when matched with another user.
+- **Chrome Extension**: Use the extension to save restaurants directly from your browser when restaurant is searched on Google Maps.
+
+# For Developers
 ## Technologies Used
 
 - **Backend**: Flask
@@ -74,9 +102,7 @@ def calculate_similarity(a, b):
     return float(similarity)
 ```
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Python 3.x
 - Flask
@@ -84,32 +110,6 @@ def calculate_similarity(a, b):
 - dotenv
 - jQuery
 
-### Accessing the Program
-
-Binge Web Page can be accessed at `http://www.bingeeating.study` or `https://deltahacks-git-main-sams-projects-71d5eb04.vercel.app/`.
-
-## Chrome Extension Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/yourusername/binge.git
-   cd binge
-   ```
-2. Navigate to the `extension` directory in your cloned repository.
-3. Open Chrome and go to `chrome://extensions/`.
-4. Enable "Developer mode" in the top right corner.
-5. Click on "Load unpacked" and select the `extension` directory.
-6. The Binge extension should now be installed and ready to use.
-
-## Usage
-
-- **Login**: Click on the "Login" button to login to existing account.
-- **Signup**: Create a new account by filling out the signup form and the questionaire.
-- **Profile**: After logging in, you can view and edit your profile, including your saved restaurants.
-- **Restaurant Matching**: Use the restaurant matching feature to find potential matches based on your preferences.
-- **Email Notifications**: Users receive email notifications when matched with another user.
-- **Chrome Extension**: Use the extension to save restaurants directly from your browser when restaurant is searched on Google Maps.
 
 ## Acknowledgments
 
