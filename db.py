@@ -57,11 +57,11 @@ class DB:
             return user.to_dict()
         return None
 
-    def add_restaurant(self, userid, restaurant):
+    def add_restaurant(self, email, restaurant):
         # print(self.embeddings)
         try:
             data = {
-                'userid': userid,
+                'email': email,
                 'restaurant': restaurant, 
                 'date': datetime.now()
             }
@@ -94,7 +94,7 @@ class DB:
         ]
 
         print(f"filtered_data: {filtered_data}")
-        users = [self.get_user_by_email(entry['userid']) for entry in filtered_data]
+        users = [self.get_user_by_email(entry['email']) for entry in filtered_data]
         print(f"users: {users}")
         filtered_users = [user for user in users if user is not None]
 
