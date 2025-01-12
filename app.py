@@ -2,28 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from db import DB
 import os
 from dotenv import load_dotenv
-from authlib.integrations.flask_client import OAuth
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 db = DB()
-
-# Auth0 Configuration
-AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-oauth = OAuth(app)
-auth0 = oauth.register(
-    'auth0',
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    api_base_url=f'https://{AUTH0_DOMAIN}',
-    access_token_url=f'https://{AUTH0_DOMAIN}/oauth/token',
-    authorize_url=f'https://{AUTH0_DOMAIN}/authorize',
-    client_kwargs={'scope': 'openid profile email'},
-)
 
 def is_ajax_request():
     return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -35,29 +19,52 @@ def index():
         return render_template('home_content.html')
     return render_template('base.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return auth0.authorize_redirect(redirect_uri=url_for('callback', _external=True))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        user = db.get_user_by_email(email)
+        if user and password == user.get('password'):
+            session['email'] = email
+            restaurants = db.get_restaurant_by_user(user['email'])
+            user['saved_restaurants'] = restaurants
+            return render_template('profile.html', user=user)
+        else:
+            return 'Invalid email or password', 400
+    
+    return render_template('login.html')
 
-@app.route('/callback')
-def callback():
-    token = auth0.authorize_access_token()
-    user_info = auth0.get('userinfo').json()
-    
-    session['email'] = user_info['email']
-    session['name'] = user_info['name']
-    
-    # You can also save user info to your database if needed
-    # Check if user exists in your DB and create if not
-    user = db.get_user_by_email(user_info['email'])
-    if not user:
-        db.add_user({
-            'name': user_info['name'],
-            'email': user_info['email'],
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        user_data = {
+            'name': request.form.get('name'),
+            'email': request.form.get('email'),
+            'password': request.form.get('password'),
+
+            'relationship_goals': request.form.get('relationship_goals'),
+            'affection_expression': request.form.get('affection_expression'),
+            'free_time': request.form.get('free_time'),
+            'motivation': request.form.get('motivation'),
+            'communication_style': request.form.get('communication_style'),
+
             'saved_restaurants': []
-        })
-
-    return redirect(url_for('profile'))
+        }
+        
+        if db.get_user_by_email(user_data['email']):
+            flash('Email already exists')
+            return render_template('signup.html')
+        
+        if db.add_user(user_data):
+            session['email'] = user_data['email']
+            flash('Account created successfully!')
+            return render_template('profile.html', user=user_data)
+        else:
+            return 'Error creating account', 400
+    
+    return render_template('signup.html')
 
 @app.route('/profile', methods=['GET'])
 def profile():
@@ -79,12 +86,13 @@ def profile():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(auth0.logout())
+    return redirect(url_for('index'))
 
 @app.route('/restaurant', methods=['GET'])
 def restaurant():
     if request.method == 'GET':
         restaurant = request.args.get('name')
+    # session['restaurant'] = restaurant
 
     if 'email' not in session:
         flash('Please login first')
