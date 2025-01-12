@@ -5,6 +5,7 @@ import os
 import base64
 from cohere_scripts import MAPPINGS, create_embeddings, calculate_similarity
 from dotenv import load_dotenv
+from email_service import *
 
 load_dotenv()
 
@@ -67,7 +68,7 @@ class DB:
             self.db.collection('restaurant').add(data)
             match = self.check_matches(restaurant)
             if match is not None:
-                pass # email function here
+                send_email(match[0], match[1], restaurant['restaurant'])
             return True
         except Exception as e:
             print(f'Error adding restaurant: {str(e)}')

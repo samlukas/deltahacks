@@ -3,11 +3,14 @@ import os
 import re
 import cohere
 from email.message import EmailMessage
+from dotenv import load_dotenv
 
-co = cohere.ClientV2(api_key=os.environ.get("COHERE_API_KEY"))
+load_dotenv()
+
+co = cohere.Client(api_key=os.getenv("COHERE_API_KEY"))
 
 def send_email(user, matched_user, restaurant):
-    binge_email = os.environ.get("EMAIL_ID")
+    binge_email = os.getenv("EMAIL_ID")
 
     message = get_message(user, matched_user, restaurant)
 
@@ -17,9 +20,9 @@ def send_email(user, matched_user, restaurant):
     msg['From'] = binge_email
     msg['To'] = user["email"]
 
-    s = smtplib.SMTP('smpt.gmail.com', os.environ.get("EMAIL_PORT"))
+    s = smtplib.SMTP('smpt.gmail.com', 587)
     s.starttls()
-    s.login(binge_email, os.environ.get("EMAIL_PW"))
+    s.login(binge_email, os.getenv("EMAIL_PW"))
     s.send_message(msg)
     s.quit()
 
@@ -27,14 +30,9 @@ def get_message(user, matched_user, restaurant):
     prompt = get_prompt(user, matched_user, restaurant)
     res = co.chat(
         model="command-r-plus-08-2024",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
+        message=prompt,
     )
-    return res.message.content[0].text
+    return res.text
 
 def get_prompt(user, matched_user, restaurant):
     matched_user_profile = f"Wants {matched_user["relationship_goals"]} relationship, Expresses emotion {matched_user["affection_expression"]}, {matched_user["free_time"]} on free times, {matched_user["motivation"]} motivates me, Has {matched_user["communication_style"]} communication style"
