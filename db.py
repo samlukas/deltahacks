@@ -68,7 +68,13 @@ class DB:
             self.db.collection('restaurant').add(data)
             match = self.check_matches(restaurant)
             if match is not None:
+                print("match found")
+                print(match[0])
+                print(match[1])
+                print(restaurant['restaurant'])
                 send_email(match[0], match[1], restaurant['restaurant'])
+            else:
+                print("no match found")
             return True
         except Exception as e:
             print(f'Error adding restaurant: {str(e)}')
@@ -102,11 +108,14 @@ class DB:
         user_embeddings = self.answers_to_embeddings(user_answers)
 
         if len(user_embeddings) < 2:
+            print("returned None")
             return None
         else:
             i, j = self.find_max_similarity(user_embeddings)
             if i < 0 or j < 0 or i >= len(filtered_users) or j >= len(filtered_users):
+                print("returned None")
                 return None
+            
             return (filtered_users[i], filtered_users[j])
  
     def answers_to_embeddings(self, answers):
