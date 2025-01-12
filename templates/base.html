@@ -98,6 +98,7 @@
     </style>
 </head>
 <body>
+    <div id="flash-container"></div>
     <!-- <div id="flash-container">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -140,6 +141,7 @@
                         $('#content').html(response);
                         updateTitle(url);
                         history.pushState({}, '', url);
+
                     },
                     error: function(xhr) {
                         const flashDiv = $('<div>')
